@@ -3,5 +3,5 @@ Oltralytics is a lightweight, extensible server for getting up and running with 
 
 ### Usage
 `sh
-docker run --gpus all -p 11535:11535 alyshmahell/oltralytics:lates
+docker run -d --name oltralytics --gpus all -p 11535:11535 alyshmahell/oltralytics:latest
 `
