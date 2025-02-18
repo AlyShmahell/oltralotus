@@ -1,11 +1,27 @@
 import cv2
 import time
 import json
+import httpx
 import asyncio
 import websockets
 
-async def send_video():
-    uri = "ws://localhost:11535/detect/yolo11n.pt"
+
+
+async def func():
+    async with httpx.AsyncClient() as client:
+        tracker = {
+            'tracker_type': 'bytetrack' ,
+            'track_high_thresh': 0.25 ,
+            'track_low_thresh': 0.1 ,
+            'new_track_thresh': 0.25 ,
+            'track_buffer': 30,
+            'match_thresh': 0.8 ,
+            'fuse_score': True
+        }
+        resp = await client.post("http://localhost:11535/detect", json={"model": "yolo11n-seg.pt", "tracker": tracker})
+        if resp.status_code != 200:
+            return
+    uri = "ws://localhost:11535/detect"
     cap = cv2.VideoCapture(2)
     W, H = 1280, 720
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, W)
@@ -27,13 +43,9 @@ async def send_video():
                     try:
                         resp = json.loads(resp)
                     except Exception as e:
-                        resp = {}
+                        resp = []
                     if resp:
-                        for entries in resp.values():
-                            try:
-                                entries = json.loads(entries)
-                            except:
-                                entries = {}
+                        for entries in resp:
                             if entries:
                                 for entry in entries:
                                     cv2.rectangle(
@@ -62,6 +74,19 @@ async def send_video():
                                         2, 
                                         cv2.LINE_AA
                                     )
+                                    cv2.putText(
+                                        frame, 
+                                        f'ID #{entry.get("track_id", "")}', 
+                                        (
+                                            int(entry.get("box", {}).get("x2")), 
+                                            int(entry.get("box", {}).get("y1")) - 10
+                                        ),
+                                        cv2.FONT_HERSHEY_SIMPLEX, 
+                                        0.5, 
+                                        (0, 255, 0), 
+                                        2, 
+                                        cv2.LINE_AA
+                                    )
                                     cv2.imshow('', frame)
                                     cv2.waitKey(1)
                     t = time.perf_counter() -s 
@@ -71,4 +96,4 @@ async def send_video():
             await asyncio.sleep(2) 
             cap.release()
 
-asyncio.run(send_video())
+asyncio.run(func())
