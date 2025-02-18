@@ -1,0 +1,9 @@
+FROM ultralytics/ultralytics:8.3.75
+
+RUN apt update -y && apt upgrade -y --no-install-recommends && apt autoremove -y && apt clean -y
+
+WORKDIR /apps/oltralytics
+
+COPY ./requirements.txt ./
+
+RUN pip install -r requirements.txt 

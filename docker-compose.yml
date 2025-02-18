@@ -1,0 +1,44 @@
+services:
+  ultralytics:
+    pull_policy: if_not_present
+    image: ultralytics/ultralytics:8.3.75
+  oltralytics-base:
+    pull_policy: never
+    container_name: oltralytics-base
+    image: oltralytics-base
+    build:
+      context: .
+      dockerfile: dockerfile.base
+    depends_on:
+      - ultralytics
+  oltralytics:
+    cpus: 4.0
+    mem_limit: 4096m
+    pull_policy: never
+    ports:
+      - "11535:11535"
+    restart: always
+    build:
+      context: .
+      dockerfile: dockerfile
+    container_name: oltralytics
+    image: oltralytics
+    volumes:
+      - type: bind
+        source: ./files
+        target: /file/oltralytics
+    runtime: nvidia
+    deploy:
+      mode: global
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu]
+    networks:
+      - oltralytics
+    depends_on:
+      - oltralytics-base
+networks:
+  oltralytics:
+    driver: bridge
