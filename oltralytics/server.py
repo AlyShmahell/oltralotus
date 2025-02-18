@@ -1,4 +1,4 @@
-
+import __info__
 import cv2
 import logging
 import threading
@@ -8,8 +8,23 @@ import yaml
 from collections import defaultdict
 from ultralytics import YOLO
 from ultralytics.engine.results import Results
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request, Response
+from fastapi import FastAPI, APIRouter, WebSocket, WebSocketDisconnect, Request, Response
 logging.basicConfig(level=logging.INFO)
+
+class colors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+    def __new__(self, text: str, name: str = ''):
+        if hasattr(self, name):
+            return getattr(self, name) + text + self.ENDC
+        return text
 
 class Singleton(type):
     _instances = {}
@@ -24,8 +39,6 @@ class Models(defaultdict, metaclass=Singleton):
     pass
     
 app = FastAPI()
-
-from fastapi import APIRouter
 
 class Detector:
     def __init__(self):
@@ -75,4 +88,5 @@ if __name__ == "__main__":
     import uvicorn
     detector = Detector()
     app.include_router(detector.router)
+    logging.info(colors(f" Oltralytics Version {__info__.__version__}", "HEADER"))
     uvicorn.run(app, host="0.0.0.0", port=11535, log_level="info")
