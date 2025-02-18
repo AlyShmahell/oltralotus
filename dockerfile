@@ -1,9 +1,9 @@
-FROM alyshmahell/oltralytics:base
+FROM alyshmahell/oltralotus:base
 
-WORKDIR /apps/oltralytics 
+WORKDIR /apps/oltralotus 
 
-COPY oltralytics/ ./
+COPY oltralotus/ ./
 
-RUN mv ./script.py /usr/local/bin/oltralytics && chmod +x /usr/local/bin/oltralytics
+RUN mv ./script.py /usr/local/bin/oltralotus && chmod +x /usr/local/bin/oltralotus
 
 CMD python server.py

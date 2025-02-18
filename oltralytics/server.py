@@ -88,5 +88,5 @@ if __name__ == "__main__":
     import uvicorn
     detector = Detector()
     app.include_router(detector.router)
-    logging.info(colors(f" Oltralytics Version {__info__.__version__}", "HEADER"))
+    logging.info(colors(f" Oltralotus Version {__info__.__version__}", "HEADER"))
     uvicorn.run(app, host="0.0.0.0", port=11535, log_level="info")
