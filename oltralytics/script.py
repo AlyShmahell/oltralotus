@@ -8,7 +8,7 @@ from ultralytics.utils.downloads import attempt_download_asset
 
 def pull(name):
     check_suffix(name)
-    print(f"downloaded {attempt_download_asset(Path('/files/oltralytics')/name)}")
+    print(f"downloaded {attempt_download_asset(name)}")
 
 def main(command, *params):
     commands = {

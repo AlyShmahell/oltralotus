@@ -1,4 +1,4 @@
-FROM oltralytics-base
+FROM alyshmahell/oltralytics:base
 
 WORKDIR /apps/oltralytics 
 

@@ -5,7 +5,7 @@ services:
   oltralytics-base:
     pull_policy: never
     container_name: oltralytics-base
-    image: oltralytics-base
+    image: alyshmahell/oltralytics:base
     build:
       context: .
       dockerfile: dockerfile.base
@@ -22,11 +22,7 @@ services:
       context: .
       dockerfile: dockerfile
     container_name: oltralytics
-    image: oltralytics
-    volumes:
-      - type: bind
-        source: ./files
-        target: /file/oltralytics
+    image: alyshmahell/oltralytics:latest
     runtime: nvidia
     deploy:
       mode: global
