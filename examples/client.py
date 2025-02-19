@@ -40,6 +40,8 @@ async def func():
                     _, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 80])
                     await websocket.send(buffer.tobytes())
                     resp = await websocket.recv()
+                    t = time.perf_counter() -s 
+                    print(t)
                     try:
                         resp = json.loads(resp)
                     except Exception as e:
@@ -89,8 +91,6 @@ async def func():
                                     )
                                     cv2.imshow('', frame)
                                     cv2.waitKey(1)
-                    t = time.perf_counter() -s 
-                    print(t)
         except websockets.exceptions.ConnectionClosedError as e:
             print(f"Connection lost: {e}. Reconnecting...")
             await asyncio.sleep(2) 
