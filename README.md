@@ -6,7 +6,7 @@ Oltralotus is a lightweight, extensible server for getting up and running with U
     ```sh
     git clone https://github.com/alyshmahell/oltralotus
     cd oltralotus
-    ./run
+    ./build
     ```
 - from dockerhub:
     ```sh
